@@ -190,12 +190,6 @@ class MyRobot(wpilib.TimedRobot):
         elif outtake_button_pressed:
             self.intake.intake_spin(-0.5)
 
-<<<<<<< Updated upstream
-=======
-        elif test_IR_button_pressed:
-            self.ir_test.test()
-
->>>>>>> Stashed changes
         else:
             self.intake.stop()
 

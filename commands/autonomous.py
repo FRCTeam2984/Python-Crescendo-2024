@@ -7,7 +7,6 @@ from subsystems.intake import Intake
 
 from phoenix5.sensors import AbsoluteSensorRange
 import phoenix5
-from math import max
 
 #switches on robot that change values to run different autonomous codes for each.
 class Autonomous:
@@ -61,24 +60,26 @@ class Autonomous:
             print("releasing kickstand")
 
         elif self.stage == self.KICKSTAND:
-            self.arm.desired_position = 86
-
+            self.arm.desired_position = 94
+            self.arm.arm_to_angle(self.arm.desired_position)
             if abs(self.arm.desired_position - self.arm.get_arm_pitch()) < 2:
                 self.stage = self.MOVING_ARM_1
                 print("moving arm")
                 self.arm.shooting_override = False   
 
         elif self.stage == self.MOVING_ARM_1:
-            self.arm.desired_position = max(12, self.arm.desired_position-1)
+            self.arm.desired_position = 15
+            self.arm.arm_to_angle(self.arm.desired_position)
             
-            if abs(self.arm.desired_position - self.arm.get_arm_pitch()) < 2:
+            if abs(self.arm.desired_position - self.arm.get_arm_pitch()) < 5:
                 self.stage = self.REVVING_1
                 self.revving_1_start_time = self.timer.getFPGATimestamp()
                 self.arm.shooting_override = True
 
         elif self.stage == self.REVVING_1:
-            self.shooter.shooter_spin(.9)
-            
+            self.shooter.shooter_spin(1)
+            self.arm.arm_to_angle(self.arm.desired_position)
+        
             if self.revving_1_start_time + .5 < self.timer.getFPGATimestamp():
                 self.stage = self.SHOOTING_1
                 self.shooting_1_start_time = self.timer.getFPGATimestamp()
@@ -87,6 +88,7 @@ class Autonomous:
         elif self.stage == self.SHOOTING_1:
             self.shooter.shooter_spin(1)
             self.intake.intake_spin(.5)
+            self.arm.arm_to_angle(self.arm.desired_position)
 
             if self.shooting_1_start_time + 1 < self.timer.getFPGATimestamp():
                 self.stage = self.MOVING_ARM_2
@@ -94,7 +96,7 @@ class Autonomous:
                 print("backing up")
 
         elif self.stage == self.MOVING_ARM_2:
-            self.arm.desired_position = max(0, self.arm.desired_position - 1)
+            self.arm.desired_position = 0
             self.arm.arm_to_angle(self.arm.desired_position)
             if abs(0-self.arm.get_arm_pitch) < 2:
                 self.stage = self.BACKING_UP
@@ -102,6 +104,7 @@ class Autonomous:
         elif self.stage == self.BACKING_UP:
             self.shooter.shooter_spin(0)
             self.intake.intake_spin(0)
+            self.arm.set_speed(0)
 
             self.drive.tank_drive(0.5, 0.5)
 

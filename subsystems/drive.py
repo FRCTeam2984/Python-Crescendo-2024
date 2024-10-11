@@ -3,8 +3,8 @@
 
 import math
 from utils.math_functions import interpolation_array
-from robotpy_ftc.opmode import LinearOpMode
-from robotpy_ftc.hardware import  DcMotor
+# from robotpy_ftc.opmode import LinearOpMode
+# from robotpy_ftc.hardware import  DcMotor
 from phoenix5._ctre import WPI_TalonFX
 from subsystems.imu import IMU
 
