@@ -33,43 +33,57 @@ class AutoIntake:
         self.IR_Ready = DigitalInput(1)
 
     def auto_intake_with_sensors(self):
-        if self.stage == self.IDLE:
-            print("idle")
-            #checks if there is a note
+        # if both line break sensors are broken / note all the way in
+        if self.IR_Loading.get() == 0 and self.IR_Ready.get() == 0 :
+            self.intake.intake_spin(0) # don't spin
+        
+        # if only the first line break sensor is broken / note partially in
+        elif self.IR_Loading.get() == 0 and self.IR_Ready.get() == 1:
+            self.intake.intake_spin(.3) # spin medium
+
+        # # if no line break sensors are broken / no note
+        # elif self.IR_Loading.get() == 1 and self.IR_Ready.get() == 1:
+        else:
+            self.intake.intake_spin(.8) # spin fast
+
+        # old code
+        # if self.stage == self.IDLE:
+        #     print("idle")
+        #     #checks if there is a note
             
-            print("idle")
-            if self.IR_Loading.get() == 0 or self.IR_Ready.get() == 0 :
-                print ("note already in")
-                return
-            #checks if the arm is down
-            if self.imu.get_pitch() >= 5:
-                print("arm too high")
-                return
-            #if both tests passed, begin to intake
-            self.stage = self.INTAKE_1
-
-        #intake normally until first beam broken
-        elif self.stage == self.INTAKE_1:
-            print("intake_1")
-            self.intake.intake_spin(1)
-            #if beam 1 broken:
-            if self.IR_Loading.get() == 0 :
-                self.stage = self.INTAKE_2
-
-        #intake slowly until second beam broken
-        elif self.stage == self.INTAKE_2:
-            print("intake_2")
-            self.intake.intake_spin(.3)
-            #if beam 2 broken:
-            if self.IR_Ready.get() == 0 :
-                self.stage = self.FINISHED
+        #     print("idle")
+        #     if self.IR_Loading.get() == 0 or self.IR_Ready.get() == 0 :
+        #         print ("note already in")
+        #         return
             
-        elif self.stage == self.FINISHED:
-            print("finished")
-            pass
+        #     #checks if the arm is down
+        #     if self.imu.get_pitch() >= 5:
+        #         print("arm too high")
+        #         return
+        #     #if both tests passed, begin to intake
+        #     self.stage = self.INTAKE_1
 
-        elif self.stage == self.FINISHED:
-            pass
+        # #intake normally until first beam broken
+        # elif self.stage == self.INTAKE_1:
+        #     print("intake_1")
+        #     self.intake.intake_spin(1)
+        #     #if beam 1 broken:
+        #     if self.IR_Loading.get() == 0 :
+        #         self.stage = self.INTAKE_2
+
+        # #intake slowly until second beam broken
+        # elif self.stage == self.INTAKE_2:
+        #     print("intake_2")
+        #     self.intake.intake_spin(.3)
+        #     #if beam 2 broken:
+        #     if self.IR_Ready.get() == 0 :
+        #         self.stage = self.FINISHED
+            
+        # elif self.stage == self.FINISHED:
+        #     print("finished")
+
+        # else:
+        #     self.stage = self.IDLE
 
     def auto_intake(self):
         DigitalInput(0)

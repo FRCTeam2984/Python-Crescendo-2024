@@ -175,20 +175,20 @@ class MyRobot(wpilib.TimedRobot):
             
         # ---------- INTAKE ----------
         if intake_button_pressed:
-            self.intake.intake_spin(0.5)
+            if shoot_button_pressed:
+                self.intake.intake_spin(1)
+            else:
+                self.intake.intake_spin(0.5)
         
         elif sensor_intake_button_pressed:
-            self.auto_intake.auto_intake_with_sensors()
-            print("got in")
-        
-        elif sensor_intake_button_pressed:
-            self.auto_intake.auto_intake_with_sensors()
+            if shoot_button_pressed:
+                self.intake.intake_spin(1)
+            else:
+                self.auto_intake.auto_intake_with_sensors()
+                #print("got in")
                          
         elif outtake_button_pressed:
             self.intake.intake_spin(-0.5)
-
-        elif ir_testing_button_pressed:
-            self.ir_test.test()
 
         else:
             self.intake.stop()
