@@ -124,8 +124,8 @@ class MyRobot(wpilib.TimedRobot):
     def autonomousPeriodic(self):
 
         #calculating gravity compensation
-        self.arm.gravity_comp = 0.14 * math.cos(self.arm.get_arm_pitch() * math.pi / 180)
-        self.autonomous.two_note_auto()
+        self.arm.gravity_comp = 0.21 * math.cos(self.arm.get_arm_pitch() * math.pi / 180)
+        self.autonomous.one_note_auto()
          
     # setup before our robot transitions to teleop (where we control with a joystick or custom controller)
     def teleopInit(self):
@@ -152,7 +152,7 @@ class MyRobot(wpilib.TimedRobot):
         climb_down_button_pressed = self.operator_controller.getAButton() #hook moves down #THIS IS ACTUALLY BUTTON A # was B
         climb_up_button_pressed = self.operator_controller.getXButton() #hook moves up #THIS IS ACTUALLY BUTTON X # A
         shoot_button_pressed = self.operator_controller.getRightTriggerAxis() == 1
-        amp_align_button_pressed = self.operator_controller.getYButton()
+        #amp_align_button_pressed = self.operator_controller.getYButton()
         amp_shoot_button_pressed = self.operator_controller.getBButton() #THIS IS ACTUALLY BUTTON B # X
         intake_button_pressed = self.operator_controller.getRightBumper()
         outtake_button_pressed = self.operator_controller.getLeftBumper()
@@ -190,6 +190,12 @@ class MyRobot(wpilib.TimedRobot):
         elif outtake_button_pressed:
             self.intake.intake_spin(-0.5)
 
+<<<<<<< Updated upstream
+=======
+        elif test_IR_button_pressed:
+            self.ir_test.test()
+
+>>>>>>> Stashed changes
         else:
             self.intake.stop()
 
@@ -234,7 +240,7 @@ class MyRobot(wpilib.TimedRobot):
         # elif auto_get_note:
         #     auto_turning = self.auto_drive.go_to_note()
         elif shooting_position_button_pressed:
-            self.arm.desired_position = 12
+            self.arm.desired_position = 17
             
         elif intake_position_button_pressed:
             # self.arm.soft_drop()
