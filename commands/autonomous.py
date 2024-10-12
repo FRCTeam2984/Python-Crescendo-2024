@@ -6,7 +6,7 @@ from subsystems.shooter import Shooter
 from subsystems.intake import Intake
 
 from phoenix5.sensors import AbsoluteSensorRange
-import phoenix5
+
 
 #switches on robot that change values to run different autonomous codes for each.
 class Autonomous:
